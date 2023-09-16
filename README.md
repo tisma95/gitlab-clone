@@ -13,7 +13,6 @@
 This repository goal is to clone all repositories of gitlab associate to the user:
  + the personal user repositories private and public,
  + the user organization repositories,
- + the ancestor repositories,
  + the fork repositories.
 
 If the repository existed pull to update will be.
