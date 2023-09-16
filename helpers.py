@@ -72,3 +72,37 @@ def getSecondsConvertion(seconds):
         message = f"{functionName}::Error has met!"
         logMessage(message=message, logType="error")
         exit(0)
+
+def logMessage(message, logType, addSeparator=True):
+    """
+        Name
+        -----
+        logMesaage
+
+        Description
+        ------------
+        Helper function use to display the message in terminal and in log.
+
+        Parameters
+        -----------
+        :param message(required str): the log message to display.
+        :param logType (requied str): the log type between error, warning, info
+        :param addSeparator (required boolean): define if for terminal the seperator should be done
+
+        Response
+        ---------
+        None
+    """
+    import logging
+    # Display the log in terminal
+    if addSeparator:
+        print(f"\n{message}\n")
+    else:
+        print(message)
+    # Display the log in log file according to message type
+    if logType and logType.lower() == "info":
+        logging.info(message)
+    elif logType and logType.lower() == "error":
+        logging.error(message)
+    elif logType and logType.lower() == "warning":
+        logging.warning(message)
