@@ -73,6 +73,55 @@ def getSecondsConvertion(seconds):
         logMessage(message=message, logType="error")
         exit(0)
 
+def verificationConfig(config):
+    """
+        Name
+        -----
+        verificationCnfig
+
+        Description
+        ------------
+        Helper function which will verify that the configuration file for dotenv is correct and contains the expected values.
+
+        The function will stop the program if incorrect config file.
+
+        Parameters
+        -----------
+        :param config(required dict): the dictionary which contains the environment variables.
+
+        Response
+        ---------
+        None
+    """
+    functionName = "verificationCnfig"
+    try:
+        # Define the list of expected .env variable
+        expectedKeys = ["DOMAIN", "TOKEN", "FOLDER", "PROTOCOL"]
+
+        # Verify if the contains of env
+        if not config or len(config) == 0:
+            message = "The .env file is empty or not found"
+            logMessage(message=message, logType="error")
+            exit(0)
+        elif not isinstance(config, dict):
+            message = "The .env file is not dictionary"
+            logMessage(message=message, logType="error")
+            exit(0)
+        # Verify that each expected keys are present
+        for key in expectedKeys:
+            if key not in config:
+                message = f"The key/value of {key} is required inside .env"
+                logMessage(message=message, logType="error")
+                exit(0)
+            elif len(config[key]) < 1:
+                message = f"The {key} inside .env is empty"
+                logMessage(message=message, logType="error")
+                exit(0)
+    except Exception as err:
+        message = f"{functionName}::Unexpected {err}, {type(err)}"
+        logMessage(message=message, logType="error")
+        exit(0)
+
 def logMessage(message, logType, addSeparator=True):
     """
         Name

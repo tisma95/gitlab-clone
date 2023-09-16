@@ -38,7 +38,12 @@ startTime = time.time()
 
 try:
     # Import the env
-    pass
+    from dotenv import dotenv_values
+
+    config = dotenv_values(".env")
+
+    # Verification of config
+    verificationConfig(config=config)
 
 except Exception as err:
     message = f"Unexpected {err}, {type(err)}"
