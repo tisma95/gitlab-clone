@@ -9,6 +9,8 @@
 """
     The main package which will load the env variable to clone the gihub repositories.
 """
+import warnings
+warnings.filterwarnings("ignore")
 
 # Import the modules
 import pyfiglet
@@ -44,6 +46,17 @@ try:
 
     # Verification of config
     verificationConfig(config=config)
+
+    # Set the constants values
+    TOKEN = config["TOKEN"]
+    FOLDER = config["FOLDER"]
+    BASE_URL = f"{config['PROTOCOL']}://{config['DOMAIN']}/api/v4"
+
+
+    # TODO: to be remove only for test
+    responseRepo = getRepositoryData(baseUrl=BASE_URL, token=TOKEN)
+    print(responseRepo)
+
 
 except Exception as err:
     message = f"Unexpected {err}, {type(err)}"

@@ -9,6 +9,8 @@
 """
     The helper functions which will be used inside the main file.
 """
+import warnings
+warnings.filterwarnings("ignore")
 
 def getSecondsConvertion(seconds):
     """
@@ -155,3 +157,64 @@ def logMessage(message, logType, addSeparator=True):
         logging.error(message)
     elif logType and logType.lower() == "warning":
         logging.warning(message)
+
+def getRepositoryData(baseUrl, token):
+    """
+        Name
+        -----
+        getRepositoryData
+
+        Description
+        ------------
+        Helper function to return the list of repositories names for connected user.
+
+        Parameters
+        -----------
+        :param baseUrl(required string): the base url of request
+        :param token(required string): the user token
+
+        Response
+        ---------
+        Will return the list of user repository data, the response will be an array of dict with description for each item:
+        + name: the name of repository
+        + url: the clone url of repository
+        + isFork: the boolean to specify if the repository is cloning repository or not
+    """
+    functionName = "getRepositoryData"
+    import requests
+    try:
+        # Prepare the requests need
+        page = 0
+        isContinue = True
+        response = []
+        while isContinue:
+            page += 1
+            # Call the API to fetch the list of repositories
+            url = baseUrl + f"/projects?private_token={token}&page={page}"
+            responseRepo = requests.get(url=url, verify=False)
+            if responseRepo.status_code != 200:
+                message = f"{functionName}::Request to Gitlab to fetch repository failed !"
+                logMessage(message=message, logType="error")
+                logMessage(message=responseRepo.text, logType="error", addSeparator=False)
+                exit(0)
+            else:
+                # Convert the response of repository list
+                responseRepoData = responseRepo.json()
+                if len(responseRepoData) > 0:
+                    for repo in responseRepoData:
+                        # Add the repo name in list
+                        response.append({
+                            "name": repo["name"],
+                            "url": repo["http_url_to_repo"] if repo["http_url_to_repo"] else "",
+                            "isFork": True if 'forked_from_project' in repo else False,
+                            "forkData": repo["forked_from_project"] if 'forked_from_project' in repo else None,
+                            "defaultBranch": repo["default_branch"]
+                        })
+                else:
+                    # All repositories has been fetched
+                    isContinue = False
+        return response
+    except Exception as err:
+        message = f"{functionName}::Unexpected {err}, {type(err)}"
+        logMessage(message=message, logType="error")
+        exit(0)
