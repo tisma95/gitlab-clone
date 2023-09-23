@@ -80,23 +80,26 @@ try:
     if not os.path.isdir(FOLDER):
         os.makedirs(FOLDER)
     for repo in responseRepo:
-        resultFolder = FOLDER + "/" + repo["name"]
+        repoName = repo["name"]
+        # Create the result folder
+        resultFolder = f"{FOLDER}/{repoName.replace(' ', '-')}"
         if not os.path.isdir(resultFolder):
-            # TODO: delete next
-            # os.makedirs(resultFolder)
+            os.makedirs(resultFolder)
             metric["new"] += 1
+            try:
+                cloneUrl = getRepoCloneUrl(url=repo["url"], username=USERNAME, token=TOKEN)
+                cloneCommand = f"git clone {cloneUrl} {resultFolder}"
+                os.system(cloneCommand)
+            except:
+                repo["failed"] += 1
+                repoListFailed.append(repoName)
         else:
             metric["update"] += 1
-        cloneUrl = getRepoCloneUrl(url=repo["url"], username=USERNAME, token=TOKEN)
-        # TODO: for test next
-        cloneCommand = f"git clone {cloneUrl} {FOLDER}"
-        os.system(cloneCommand)
-        print(cloneUrl)
 
     # Display the result of metric
     message = f"The summary of actions are:"
     logMessage(message=message, logType="info")
-    message = f"Number of new deposit clones: {metric['new']}"
+    message = f"Number of new repository clones: {metric['new']}"
     logMessage(message=message, logType="info", addSeparator=False)
     message = f"Number of repository updates: {metric['update']}"
     logMessage(message=message, logType="info", addSeparator=False)
