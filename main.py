@@ -52,10 +52,59 @@ try:
     FOLDER = config["FOLDER"]
     BASE_URL = f"{config['PROTOCOL']}://{config['DOMAIN']}/api/v4"
 
+    # Init the metric
+    metric = {
+        "success": 0,
+        "failed": 0,
+        "update": 0,
+        "new": 0
+    }
+    # Define the list of repo list which has failed to be cloned
+    repoListFailed = []
+    # Define the list of repo list which branches have failed to be cloned
+    repoListPartial = []
+    # Define the list of failed update forked
+    repoForkFailed = []
 
-    # TODO: to be remove only for test
+    # Display the repository list
     responseRepo = getRepositoryData(baseUrl=BASE_URL, token=TOKEN)
-    print(responseRepo)
+    message = f"{len(responseRepo)} repositories found and are:"
+    logMessage(message=message, logType="info")
+    for repo in responseRepo:
+        message = f"{repo['name']}"
+        logMessage(message=message, logType="info", addSeparator=False)
+
+    # Clone the repositories
+
+    # Display the result of metric
+    message = f"The summary of actions are:"
+    logMessage(message=message, logType="info")
+    message = f"Number of new deposit clones: {metric['new']}"
+    logMessage(message=message, logType="info", addSeparator=False)
+    message = f"Number of repository updates: {metric['update']}"
+    logMessage(message=message, logType="info", addSeparator=False)
+    message = f"Number of failures: {metric['failed']}"
+    logMessage(message=message, logType="info", addSeparator=False)
+    message = f"Number of successes: {metric['success']}"
+    logMessage(message=message, logType="info", addSeparator=False)
+    if len(repoForkFailed) > 0:
+        message = f"The list of {len(repoForkFailed)} fork {'repository' if len(repoForkFailed) < 2 else 'repositories'} which failed to be synchronized:"
+        logMessage(message=message, logType="info")
+        for repo in repoForkFailed:
+            logMessage(message=repo, logType="info", addSeparator=False)
+        logMessage(message="\n", logType="info", addSeparator=False)
+    if len(repoListFailed) > 0:
+        message = f"The list of {len(repoListFailed)} {'repository which' if len(repoListFailed) < 2 else 'repositories which are failed'} failed to be cloned:"
+        logMessage(message=message, logType="info")
+        for repo in repoListFailed:
+            logMessage(message=repo, logType="info", addSeparator=False)
+        logMessage(message="\n", logType="info", addSeparator=False)
+    if len(repoListPartial) > 0:
+        message = f"The list of {len(repoListPartial)} {'repository' if len(repoListPartial) < 2 else 'repositories'} which failed to be updated:"
+        logMessage(message=message, logType="info")
+        for repo in repoListPartial:
+            logMessage(message=repo, logType="info", addSeparator=False)
+        logMessage(message="\n", logType="info", addSeparator=False)
 
 
 except Exception as err:
