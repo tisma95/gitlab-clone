@@ -19,6 +19,9 @@ If the repository existed pull to update will be.
 
 Clone all branchs in folder.
 
+**WARNING:**
+The repository name with space will be replace in clone folder by -. Example the repository name like **repo 1** will be clone with name **repo-1**.
+
 ## Requirement
 
 Before starting the project you need to install on your computer the following packages:
