@@ -77,14 +77,21 @@ try:
 
     # Clone the repositories
     import os
+    if not os.path.isdir(FOLDER):
+        os.makedirs(FOLDER)
     for repo in responseRepo:
         resultFolder = FOLDER + "/" + repo["name"]
         if not os.path.isdir(resultFolder):
-            os.makedirs(resultFolder)
-
-
-        print(repo['isFork'])
-        print(repo["forkData"])
+            # TODO: delete next
+            # os.makedirs(resultFolder)
+            metric["new"] += 1
+        else:
+            metric["update"] += 1
+        cloneUrl = getRepoCloneUrl(url=repo["url"], username=USERNAME, token=TOKEN)
+        # TODO: for test next
+        cloneCommand = f"git clone {cloneUrl} {FOLDER}"
+        os.system(cloneCommand)
+        print(cloneUrl)
 
     # Display the result of metric
     message = f"The summary of actions are:"

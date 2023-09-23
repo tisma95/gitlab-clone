@@ -12,6 +12,37 @@
 import warnings
 warnings.filterwarnings("ignore")
 
+def getRepoCloneUrl(url: str, username: str, token: str) -> str:
+    """
+        Name
+        -----
+        getRepoCloneUrl
+
+        Description
+        ------------
+        Helper function to return the url for cloning with token.
+
+        Parameters
+        -----------
+        :param url(required string): the web url to clone the repository
+        :param username(required string): the username
+        :param token(required string): the user token
+
+        Response
+        ---------
+        Will return the url string in format https://username:personal_token@clone_url.
+    """
+    functionName = getRepoCloneUrl.__name__
+    try:
+       splitUrl = url.split("://")
+       method = splitUrl[0]
+       cloneUrl = splitUrl[1]
+       return f'{method}://{username}:{token}@{cloneUrl}'
+    except Exception as err:
+        message = f"{functionName}::Unexpected {err}, {type(err)}"
+        logMessage(message=message, logType="error")
+        exit(0)
+
 def getRepositoryBranchNames(baseUrl: str, token: str, projectId: int) -> list:
     """
         Name
