@@ -67,9 +67,13 @@ or for windows
 ```
 
 1. Init the environment variable by following [Environment variables](#environment-variables)
-2. Create the token on your **Gitlab** access only read access is required:
+2. Create the token on your **Gitlab** access only read access is required to clone all branches and repositories:
 
     <img src="./img/token.png" alt="" width="50%"/>
+
+    If you want to update the fork repositories you need to give the write access also like:
+
+    <img src="./img/token_read_and_write.png" alt="" width="50%"/>
 
 3. Run the script with command `python main.py` or `python3 main.py`
 
