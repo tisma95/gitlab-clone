@@ -1,4 +1,2 @@
-+ TODO: synchronize the clonning repositories
-+ TODO: clonne and every repositories
-+ TODO: Get the list of branch
-+ TODO: fetch all branches
++ TODO: Synchronize the cloning repository
++ TODO: Test the gihub clone on windows

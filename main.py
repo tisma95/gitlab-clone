@@ -90,11 +90,35 @@ try:
                 cloneUrl = getRepoCloneUrl(url=repo["url"], username=USERNAME, token=TOKEN)
                 cloneCommand = f"git clone {cloneUrl} {resultFolder}"
                 os.system(cloneCommand)
+                metric["success"] += 1
             except:
-                repo["failed"] += 1
+                metric["failed"] += 1
                 repoListFailed.append(repoName)
         else:
             metric["update"] += 1
+
+        # Update if it fork
+        if repo["isFork"]:
+            # TODO: continue here to synckronize the failed
+            repoForkFailed.append(repoName)
+
+        # Loop to update each branch
+        try:
+            os.chdir(resultFolder)
+            defaultBranch = repo["defaultBranch"]
+            for branchName in repo["branches"]:
+                if branchName != defaultBranch:
+                    # Checkout branch
+                    checkoutCommand = f"git fetch origin {branchName} && git checkout {branchName}"
+                    os.system(checkoutCommand)
+                    # Pull all code from branch
+                    os.system("git pull")
+            # Move to default branch
+            os.system(f"git checkout {defaultBranch}")
+            # Pull all code from branch
+            os.system("git pull")
+        except:
+            repoListPartial.append(repoName)
 
     # Display the result of metric
     message = f"The summary of actions are:"
