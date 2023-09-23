@@ -51,6 +51,7 @@ try:
     TOKEN = config["TOKEN"]
     FOLDER = config["FOLDER"]
     BASE_URL = f"{config['PROTOCOL']}://{config['DOMAIN']}/api/v4"
+    USERNAME = config["USERNAME"]
 
     # Init the metric
     metric = {
@@ -68,13 +69,22 @@ try:
 
     # Display the repository list
     responseRepo = getRepositoryData(baseUrl=BASE_URL, token=TOKEN)
-    message = f"{len(responseRepo)} repositories found and are:"
+    message = f"{len(responseRepo)} repositories found for {USERNAME} and are:"
     logMessage(message=message, logType="info")
     for repo in responseRepo:
         message = f"{repo['name']}"
         logMessage(message=message, logType="info", addSeparator=False)
 
     # Clone the repositories
+    import os
+    for repo in responseRepo:
+        resultFolder = FOLDER + "/" + repo["name"]
+        if not os.path.isdir(resultFolder):
+            os.makedirs(resultFolder)
+
+
+        print(repo['isFork'])
+        print(repo["forkData"])
 
     # Display the result of metric
     message = f"The summary of actions are:"

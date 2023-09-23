@@ -81,6 +81,8 @@ DOMAIN = gitlab.com
 PROTOCOL = https
 # Access Token To Domain
 TOKEN = your_generate_token_here
+# Username To Domain
+USERNAME = your_gitlab_username
 # Storage Folder => Folder where the repositories will be save => example /home/toto or C:\users\toto for windows
 FOLDER = folder_path_here
 ```

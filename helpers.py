@@ -142,7 +142,7 @@ def verificationConfig(config):
     functionName = "verificationCnfig"
     try:
         # Define the list of expected .env variable
-        expectedKeys = ["DOMAIN", "TOKEN", "FOLDER", "PROTOCOL"]
+        expectedKeys = ["DOMAIN", "TOKEN", "FOLDER", "PROTOCOL", "USERNAME"]
 
         # Verify if the contains of env
         if not config or len(config) == 0:
