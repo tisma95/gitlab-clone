@@ -99,8 +99,16 @@ try:
 
         # Update if it fork
         if repo["isFork"]:
-            # TODO: continue here to synckronize the failed
-            repoForkFailed.append(repoName)
+            try:
+                repoSourceUrl = repo["forkData"]["http_url_to_repo"]
+                os.chdir(resultFolder)
+                os.system(f"git remote add upstream {repoSourceUrl}")
+                os.system(f"git checkout {repo['defaultBranch']}")
+                os.system("git fetch upstream")
+                os.system(f"git pull upstream {repo['defaultBranch']}")
+                os.system(f"git push origin {repo['defaultBranch']}")
+            except:
+                repoForkFailed.append(repoName)
 
         # Loop to update each branch
         try:
