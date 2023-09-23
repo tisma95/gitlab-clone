@@ -12,6 +12,50 @@
 import warnings
 warnings.filterwarnings("ignore")
 
+def getRepositoryBranchNames(baseUrl: str, token: str, projectId: int) -> list:
+    """
+        Name
+        -----
+        getRepositoryBranches
+
+        Description
+        ------------
+        Helper function to return the list of project branch list.
+
+        Parameters
+        -----------
+        :param baseUrl(required string): the base url of request
+        :param token(required string): the user token
+        :param projectId(required integer): the id of repository project
+
+        Response
+        ---------
+        Will return the list of user repository branch names.
+    """
+    functionName = getRepositoryBranchNames.__name__
+    import requests
+    try:
+        # Prepare the requests need
+        response = []
+        url = baseUrl + f"/projects/{projectId}/repository/branches?private_token={token}"
+        responseRepo = requests.get(url=url, verify=False)
+        if responseRepo.status_code != 200:
+            message = f"{functionName}::Request to Gitlab to fetch repository branches failed !"
+            logMessage(message=message, logType="error")
+            logMessage(message=responseRepo.text, logType="error", addSeparator=False)
+        else:
+            # Convert the response of repository branch list
+            responseBranchData = responseRepo.json()
+            if len(responseBranchData) > 0:
+                for branch in responseBranchData:
+                    # Add the repo name in list
+                    response.append(branch["name"])
+        return response
+    except Exception as err:
+        message = f"{functionName}::Unexpected {err}, {type(err)}"
+        logMessage(message=message, logType="error")
+        exit(0)
+
 def getSecondsConvertion(seconds):
     """
         Name
@@ -202,13 +246,16 @@ def getRepositoryData(baseUrl, token):
                 responseRepoData = responseRepo.json()
                 if len(responseRepoData) > 0:
                     for repo in responseRepoData:
+                        # Get the repository branch list
+                        branches = getRepositoryBranchNames(baseUrl=baseUrl, token=token, projectId=repo["id"])
                         # Add the repo name in list
                         response.append({
                             "name": repo["name"],
                             "url": repo["http_url_to_repo"] if repo["http_url_to_repo"] else "",
                             "isFork": True if 'forked_from_project' in repo else False,
                             "forkData": repo["forked_from_project"] if 'forked_from_project' in repo else None,
-                            "defaultBranch": repo["default_branch"]
+                            "defaultBranch": repo["default_branch"],
+                            "branches": branches.copy()
                         })
                 else:
                     # All repositories has been fetched

@@ -1,3 +1,4 @@
-+ TODO: Try to connect to the gitlab
-+ TODO: show list of repositories
-+ TODO: clonne and every branch
++ TODO: synchronize the clonning repositories
++ TODO: clonne and every repositories
++ TODO: Get the list of branch
++ TODO: fetch all branches
