@@ -121,10 +121,16 @@ try:
                     os.system(checkoutCommand)
                     # Pull all code from branch
                     os.system("git pull")
+                    os.system("git lfs ls-files")
+                    os.system("git lfs fetch --all")
+                    os.system("git lfs checkout")
             # Move to default branch
             os.system(f"git checkout {defaultBranch}")
             # Pull all code from branch
             os.system("git pull")
+            os.system("git lfs ls-files")
+            os.system("git lfs fetch --all")
+            os.system("git lfs checkout")
         except:
             repoListPartial.append(repoName)
 
