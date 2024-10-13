@@ -43,6 +43,26 @@ def getRepoCloneUrl(url: str, username: str, token: str) -> str:
         logMessage(message=message, logType="error")
         exit(0)
 
+def updateCommitAndLFS():
+    """
+        Name
+        -----
+        updateCommitAndLFS
+
+        Description
+        ------------
+        Helper function to execute the defense push and update the lfs file.
+    """
+    import os
+    # Fetch git lfs files if exists
+    os.system("git lfs ls-files")
+    os.system("git lfs fetch --all")
+    os.system("git lfs checkout")
+    # Add defense push if some changes
+    os.system("git add .")
+    os.system("git commit -m 'Synchro by Github Clone Script'")
+    os.system("git push")
+
 def getRepositoryBranchNames(baseUrl: str, token: str, projectId: int) -> list:
     """
         Name
