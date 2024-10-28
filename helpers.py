@@ -57,7 +57,7 @@ def updateCommitAndLFS():
     # Fetch git lfs files if exists
     os.system("git lfs ls-files")
     os.system("git lfs fetch --all")
-    os.system("git lfs checkout")
+    os.system("git lfs pull")
     # Add defense push if some changes
     os.system("git add .")
     os.system("git commit -m 'Synchro by Github Clone Script'")
